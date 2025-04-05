@@ -1,0 +1,149 @@
+/* Medical Theme CSS for MediBot 2.0 */
+body {
+    background-color: #afe0f5;  /* Light blue-gray background */
+    font-family: 'Poppins', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.gradio-container {
+    background: linear-gradient(to bottom right, #ffffff, #f5f9ff);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 20px auto;
+    border: 1px solid #e1e8f0;
+}
+
+.header-container {
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(29, 86, 163, 0.2);
+}
+
+h1 {
+    color: white;
+    font-weight: 600;
+    margin: 0;
+    padding: 10px 0;
+    font-size: 32px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+button {
+    background: linear-gradient(to right, #1976d2, #2196f3) !important;
+    color: white !important;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #0d47a1, #1976d2) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.clear-button {
+    background: linear-gradient(to right, #e93a37, #f44336) !important;
+}
+
+.clear-button:hover {
+    background: linear-gradient(to right, #c62828, #e53935) !important;
+}
+
+.input-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.output-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+/* Section titles */
+h2, h3 {
+    color: #0d47a1;
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3f2fd;
+}
+
+/* Chatbot styling */
+.chatbot-container .message {
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin: 8px 0;
+}
+
+.chatbot-container .user-message {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.chatbot-container .bot-message {
+    background-color: #f1f8e9;
+    border-left: 4px solid #8bc34a;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: #757575;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+/* Fix for image visibility */
+.image-container img, .gradio-image img {
+    border: 1px solid #dddddd;
+    background-color: transparent !important;
+}
+
+.gradio-image {
+    background-color: transparent !important;
+}
+
+/* Ensure the image itself is visible */
+.gradio-image .panel-preview img {
+    max-width: 100%;
+    object-fit: contain;
+    background-color: transparent !important;
+}
+
+
+/* Additional responsive adjustments */
+@media (max-width: 768px) {
+    .gradio-container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+}
