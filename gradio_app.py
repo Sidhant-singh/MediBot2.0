@@ -319,16 +319,45 @@ custom_css = """
 
 </style>
 """
-import gradio as gr
-with gr.Blocks() as iface:
-    gr.HTML(custom_css)
+# import gradio as gr
+# with gr.Blocks() as iface:
+#     gr.HTML(custom_css)
+#     gr.Markdown("# 🏥 MediBot 2.0 - AI Medical Assistant")
+#     gr.Markdown("## Speak your medical questions and upload relevant images for analysis.")
+
+#     with gr.Row():
+#         with gr.Column(elem_classes="input-container"):
+#             voice_input = gr.Audio(type="filepath", label="🎤 Speak Your Medical Question")
+        
+#         with gr.Column(elem_classes="input-container"):
+#             image_input = gr.Image(type="filepath", label="📸 Upload Medical Image (Optional)")
+    
+#     with gr.Row():
+#         submit_btn = gr.Button("Submit", elem_classes="red-button")
+#         clear_btn = gr.Button("Clear Chat & Image", elem_classes="red-button")
+#         download_btn = gr.Button("📥 Download Chat", elem_classes="red-button")
+
+    
+#     chat_output = gr.Chatbot(label="💬 Conversation History", elem_classes="chatbot-container")
+    
+#     with gr.Row():
+#         audio_output = gr.Audio(label="🔊 Doctor's Response")
+    
+#     download_file = gr.File(label="Download Chat History")
+
+#     submit_btn.click(fn=chat_with_doctor, inputs=[voice_input, image_input], outputs=[chat_output, audio_output])
+#     clear_btn.click(fn=clear_conversation, inputs=[], outputs=[chat_output, image_input, audio_output])
+#     download_btn.click(fn=download_chat, inputs=[], outputs=[download_file])
+
+# iface.launch(debug=True)
+
+with gr.Blocks(css=custom_css) as iface:
     gr.Markdown("# 🏥 MediBot 2.0 - AI Medical Assistant")
     gr.Markdown("## Speak your medical questions and upload relevant images for analysis.")
 
     with gr.Row():
         with gr.Column(elem_classes="input-container"):
             voice_input = gr.Audio(type="filepath", label="🎤 Speak Your Medical Question")
-        
         with gr.Column(elem_classes="input-container"):
             image_input = gr.Image(type="filepath", label="📸 Upload Medical Image (Optional)")
     
@@ -337,16 +366,18 @@ with gr.Blocks() as iface:
         clear_btn = gr.Button("Clear Chat & Image", elem_classes="red-button")
         download_btn = gr.Button("📥 Download Chat", elem_classes="red-button")
 
-    
     chat_output = gr.Chatbot(label="💬 Conversation History", elem_classes="chatbot-container")
-    
+
     with gr.Row():
         audio_output = gr.Audio(label="🔊 Doctor's Response")
-    
+
     download_file = gr.File(label="Download Chat History")
 
     submit_btn.click(fn=chat_with_doctor, inputs=[voice_input, image_input], outputs=[chat_output, audio_output])
     clear_btn.click(fn=clear_conversation, inputs=[], outputs=[chat_output, image_input, audio_output])
     download_btn.click(fn=download_chat, inputs=[], outputs=[download_file])
 
-iface.launch(debug=True)
+# Launch with Render-compatible settings
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    iface.launch(server_name="0.0.0.0", server_port=port, debug=True)
