@@ -1,11 +1,171 @@
-from brain_of_the_doctor import analyze_image_with_query
-from voice_of_the_patient import transcribe_with_groq
-from voice_of_the_doctor import text_to_speech_with_gtts
+# from brain_of_the_doctor import analyze_image_with_query
+# from voice_of_the_patient import transcribe_with_groq
+# from voice_of_the_doctor import text_to_speech_with_gtts
 import os
 import base64
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Step 1: Setup Groq API key
+from dotenv import load_dotenv
+import os
+import base64
+from groq import Groq
+
+load_dotenv()
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    raise ValueError("❌ GROQ_API_KEY not found. Please set it in your .env file.")
+
+# Step 2: Encode image to Base64
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+image_path = "acne.jpg"
+encoded_image = encode_image(image_path)
+
+# Step 3: Analyze image with query
+def analyze_image_with_query(query, model, encoded_image):
+    client = Groq(api_key=GROQ_API_KEY)
+
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": query},
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"}},
+            ],
+        }
+    ]
+
+    chat_completion = client.chat.completions.create(
+        messages=messages,
+        model=model
+    )
+
+    return chat_completion.choices[0].message.content
+
+
+
+
+
+
+
+
+
+
+
+
+import logging
+import speech_recognition as sr
+from pydub import AudioSegment
+from io import BytesIO
+import os
+from dotenv import load_dotenv
+from groq import Groq
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def record_audio(file_path, timeout=20, phrase_time_limit=None):
+    recognizer = sr.Recognizer()
+    
+    try:
+        with sr.Microphone() as source:
+            logging.info("Adjusting for ambient noise...")
+            recognizer.adjust_for_ambient_noise(source, duration=1)
+            logging.info("Start speaking now...")
+
+            audio_data = recognizer.listen(source, timeout=timeout, phrase_time_limit=phrase_time_limit)
+            logging.info("Recording complete.")
+
+            wav_data = audio_data.get_wav_data()
+            audio_segment = AudioSegment.from_wav(BytesIO(wav_data))
+            audio_segment.export(file_path, format="mp3", bitrate="128k")
+
+            logging.info(f"Audio saved to {file_path}")
+
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
+
+load_dotenv()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+def transcribe_with_groq(stt_model, audio_filepath, GROQ_API_KEY):
+    client = Groq(api_key=GROQ_API_KEY)
+    audio_file = open(audio_filepath, "rb")
+    transcription = client.audio.transcriptions.create(
+        model=stt_model,
+        file=audio_file,
+        language="en",
+    )
+    return transcription.text
+
+
+
+
+
+
+
+
+import os
+import subprocess
+import platform
+from gtts import gTTS
+import elevenlabs
+from elevenlabs.client import ElevenLabs
+from dotenv import load_dotenv
+
+load_dotenv()
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
+def text_to_speech_with_gtts(input_text, output_filepath):
+    language = 'en'
+    audioobj = gTTS(text=input_text, lang=language, slow=False)
+    audioobj.save(output_filepath)
+
+    os_name = platform.system()
+    try:
+        if os_name == "Darwin":  # macOS
+            subprocess.run(['afplay', output_filepath])
+        elif os_name == "Windows":  # Windows
+            subprocess.run(['start', output_filepath], shell=True)
+        elif os_name == "Linux":  # Linux
+            subprocess.run(['mpg123', output_filepath])
+        else:
+            raise OSError("Unsupported operating system")
+    except Exception as e:
+        print(f"An error occurred while trying to play the audio: {e}")
+
+def text_to_speech_with_elevenlabs(input_text, output_filepath):
+    client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+    audio = client.generate(
+        text=input_text,
+        voice="Aria",
+        model="eleven_turbo_v2",
+        output_format="mp3_22050_32"
+    )
+    elevenlabs.save(audio, output_filepath)
+
+    os_name = platform.system()
+    try:
+        if os_name == "Darwin":
+            subprocess.run(['afplay', output_filepath])
+        elif os_name == "Windows":
+            subprocess.run(['start', output_filepath], shell=True)
+        elif os_name == "Linux":
+            subprocess.run(['aplay', output_filepath])
+        else:
+            raise OSError("Unsupported operating system")
+    except Exception as e:
+        print(f"An error occurred while trying to play the audio: {e}")
+
+
+
+
+
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
